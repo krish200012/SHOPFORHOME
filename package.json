@@ -32,10 +32,12 @@
     "formidable": "^1.2.2",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.19",
+    "mdb-ui-kit": "^4.2.0",
     "mongodb": "^3.5.9",
     "mongoose": "^5.9.24",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.4",
+    "styled-components": "^5.3.5",
     "uuid": "^8.2.0",
     "uuidv1": "^1.6.14"
   }

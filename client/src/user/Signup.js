@@ -146,7 +146,7 @@ export default function Signup() {
                 type='password'
                 id='password'
                 onChange={handleChange('password')}
-                type='password'
+                
                 value={password}
                 autoComplete='current-password'
               />
@@ -177,7 +177,7 @@ export default function Signup() {
   return (
     <Layout
       title='Signup page'
-      description='Signup to MERN E-commerce App'
+      description='Signup to ShopForHome'
       className='container col-md-8 offset-md-2'
     >
       {signUpForm()}

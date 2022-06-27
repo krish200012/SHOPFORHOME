@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { Link, withRouter, forceUpdate } from 'react-router-dom';
 import { signout, isAuthenticated } from '../auth';
-import { itemTotal } from './cartHelpers';
+import { itemTotal,itemTotalW } from './cartHelpers';
 
 import { fade, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -14,6 +14,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import MenuIcon from '@material-ui/icons/Menu';
 import MoreIcon from '@material-ui/icons/MoreVert';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import Button from '@material-ui/core/Button';
@@ -177,6 +178,16 @@ const MaterialAppBar = ({ history }) => {
             Cart
           </Link>
         </MenuItem>
+        <MenuItem>
+          <Link style={isActive(history, '/wishlist')} to='/wishlist'>
+            <IconButton aria-label='Wishlist' color='inherit'>
+              <Badge badgeContent={itemTotalW()} color='secondary'>
+                <FavoriteBorderIcon />
+              </Badge>
+            </IconButton>
+            Wishlist
+          </Link>
+        </MenuItem>
 
         {isAuthenticated() && isAuthenticated().user.role === 0 && (
           <MenuItem>
@@ -265,7 +276,7 @@ const MaterialAppBar = ({ history }) => {
           </a>
           <a href='/' style={{ color: '#ffffff', textDecoration: 'none' }}>
             <Typography className={classes.title} variant='h6' noWrap>
-              BRAND
+              ShopForHome
             </Typography>
           </a>
 
@@ -291,6 +302,14 @@ const MaterialAppBar = ({ history }) => {
                   <ShoppingCartIcon />
                 </Badge>
                 <Typography noWrap>Cart</Typography>
+              </IconButton>
+            </Link>
+            <Link style={isActive(history, '/wishlist')} to='/wishlist'>
+              <IconButton aria-label='Wishlist' color='inherit'>
+                <Badge badgeContent={itemTotalW()} color='secondary'>
+                  <FavoriteBorderIcon />
+                </Badge>
+                <Typography noWrap>Wishlist</Typography>
               </IconButton>
             </Link>
 

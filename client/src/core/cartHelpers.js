@@ -35,6 +35,14 @@ export const itemTotal = () => {
   }
   return 0;
 };
+export const itemTotalW = () => {
+  if (typeof window !== 'undefined') {
+    if (localStorage.getItem('wishlist')) {
+      return JSON.parse(localStorage.getItem('wishlist')).length;
+    }
+  }
+  return 0;
+};
 
 export const getCart = () => {
   if (typeof window !== 'undefined') {

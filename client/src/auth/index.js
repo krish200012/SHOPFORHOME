@@ -2,6 +2,7 @@ import { API } from '../config';
 
 export const signup = (user) => {
   // console.log(name, email, password);
+  console.log(JSON.stringify(user));
   return fetch(`${API}/signup`, {
     method: 'POST',
     headers: {

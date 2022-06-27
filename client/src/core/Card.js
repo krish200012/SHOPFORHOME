@@ -5,6 +5,7 @@ import moment from 'moment';
 
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
+//import ToggleButton from '@material-ui/core/ToggleButton'
 import CameraIcon from '@material-ui/icons/PhotoCamera';
 import CardM from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -18,8 +19,14 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
-
+import IconButton from '@material-ui/core/IconButton'
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+//import FavoriteBorderIcon from '@material-ui/core/FavoriteBorder';
+//import Wishlist from './Wishlist';
+import { getWishList } from './wishlistHelper'
 import { addItem, updateItem, removeItem } from './cartHelpers';
+import { addItemW, updateItemW, removeItemW } from './wishlistHelper';
 
 const useStyles = makeStyles((theme) => ({
   icon: {
@@ -55,19 +62,21 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(6),
   },
 }));
-
 const Card = ({
   product,
   showViewProductButton = true,
   showAddToCartButton = true,
+  showAddToWishlistButton = true,
   cartUpdate = false,
   showRemoveProductButton = false,
+  showRemoveProductButtonWislist = false,
   setRun = (f) => f, // default value of function
   run = undefined, // default value of undefined
 }) => {
+  
   const [redirect, setRedirect] = useState(false);
+  const [redirectW, setRedirectW] = useState(false);
   const [count, setCount] = useState(product.count);
-
   const showViewButton = (showViewProductButton) => {
     return (
       showViewProductButton && (
@@ -79,15 +88,30 @@ const Card = ({
       )
     );
   };
-
+  const [items, setItems] = useState([]);
+  
   const addToCart = () => {
     // console.log('added');
     addItem(product, setRedirect(true));
+  };
+  const addToWishlist = () => {
+     console.log(product.category);
+     
+      addItemW(product,setRedirectW(true));
+     console.log("W added",product._id)
+     
+   // Wishlist(product);
   };
 
   const shouldRedirect = (redirect) => {
     if (redirect) {
       return <Redirect to='/cart' />;
+    }
+  };
+  
+  const shouldRedirectWishlist = (redirect) => {
+    if (redirect) {
+      return <Redirect to='/wishlist' />;
     }
   };
 
@@ -99,6 +123,36 @@ const Card = ({
         </Button>
       )
     );
+  };
+  const showAddToWishlistBtn = (showAddToWishlistButton) => {
+    //setItems();
+    const ifThere=!getWishList().some(item => item._id === product._id)
+    if(ifThere){
+      return (showAddToWishlistButton && (
+          <IconButton onClick={()=>{addToWishlist();setRedirectW(true)}}  color='secondary'>
+          <FavoriteBorderIcon />
+        </IconButton>
+        ))
+
+    }
+    else{
+      return (showAddToWishlistButton && (
+        <IconButton
+          onClick={() => {
+            removeItemW(product._id);
+            setRun(!run); // run useEffect in parent Cart
+            setRedirectW(true);
+          }}
+          variant='contained'
+          color='secondary'
+          className={classes.button}
+        >
+          <FavoriteIcon/>
+          
+        </IconButton>
+      ))
+
+    }
   };
 
   const showStock = (quantity) => {
@@ -156,6 +210,25 @@ const Card = ({
     );
   };
 
+  const showRemoveButtonWishlist = (showRemoveProductButtonWislist) => {
+    return (
+      showRemoveProductButtonWislist && (
+        <IconButton
+          onClick={() => {
+            removeItemW(product._id);
+            setRun(!run); // run useEffect in parent Cart
+          }}
+          variant='contained'
+          color='secondary'
+          className={classes.button}
+        >
+          {/* <FavoriteBorderIcon /> */}
+          <DeleteIcon />
+        </IconButton>
+      )
+    );
+  };
+
   const classes = useStyles();
 
   return (
@@ -192,6 +265,7 @@ const Card = ({
         <Grid item xs={12} sm={12} md={12}>
           <CardM className={classes.card}>
             {shouldRedirect(redirect)}
+            {shouldRedirectWishlist(redirectW)}
             <ShowImage item={product} url='product' />
             <CardContent className={classes.cardContent}>
               <Typography gutterBottom variant='h5' component='h2'>
@@ -210,7 +284,9 @@ const Card = ({
               <span>
                 {showViewButton(showViewProductButton)}
                 {showAddToCartBtn(showAddToCartButton)}
+                {showAddToWishlistBtn(showAddToWishlistButton)}
                 {showRemoveButton(showRemoveProductButton)}
+                {showRemoveButtonWishlist(showRemoveProductButtonWislist)}
               </span>
               {showCartUpdateOptions(cartUpdate)}
             </CardContent>
